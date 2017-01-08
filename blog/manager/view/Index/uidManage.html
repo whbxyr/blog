@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>超级管理员管理用户</title>
+    <link rel="stylesheet" href="__CSS__/superauthorize.css">
+    <script src="__JS__/event.js"></script>
+    <script src="__JS__/cookie.js"></script>
+    <script src="__JS__/getDom.js"></script>
+    <script src="__JS__/md5.js"></script>
+    <!-- <link rel="stylesheet" href="__CSS__/clock.css"> -->
+    <!-- <link rel="shortcut icon" href="__IMG__/favicon.ico"> -->
+</head>
+<body>
+    <table cellspacing="4" class="contentshow">
+        <tr><td>账户名</td><td>删除？</td></tr>
+        {$user}
+    </table>
+    <div class="loginregister" id="login" style="display: none;">
+    <div style="text-align: center;">请输入超级管理员的账号以及密码</div>
+    <br>
+    <label for="midl">管理员账户:</label>
+    <input id="midl" name="midl" type="text" class="logininput">
+    <br>
+    <label for="midpwdl">管理员密码:</label>
+    <input id="midpwdl" name="midpwdl" type="password" class="logininput">
+    <br>
+    <span class="button" id="loginbtn">登陆</span>
+    </div>
+<script>
+	var php = '__MANAGER__';
+
+	// 登陆发送验证
+	function loginValid(mid, midpwd) {
+		var request = new XMLHttpRequest();
+	    request.open('GET', php + '/Index/managerLogincookie?mid=' + mid + '&midpwd=' + midpwd);
+	    request.send();
+		request.onreadystatechange = function () {
+		   	if (request.readyState === 4) {
+		   		if (request.status === 200) {
+                    // 由此处产生相关提示
+                    switch (request.responseText) {
+                    	case 's':
+                    		getDom('table', 'tag')[0].style.display = 'table';
+							getDom('login', 'id').style.display = 'none';
+							break;
+                    	default:
+                    		alert('错误');
+                    	    break;
+                    }
+		   		}
+		  		else {
+		   			// 当请求不到数据时就会导致错误，用以下方法显示
+		   			alert('发生错误：' + request.status);
+		   		}
+		   	}
+		}
+	}
+	(function () {
+		var mid = testCookie('mid');
+		var midpwd = testCookie('midpwd');
+		if (!mid || !midpwd) {
+			getDom('table', 'tag')[0].style.display = 'none';
+			getDom('login', 'id').style.display = 'block';
+		}
+		else {
+			loginValid(mid, midpwd);
+		}
+	})();
+
+	EventUtil.addHandler(loginbtn, 'click', function () {
+		// 获取用户填写的管理员账户名以及密码
+		mid = getDom('midl', 'id').value;
+		midpwd = getDom('midpwdl', 'id').value;
+		if (midpwd) {
+			midpwd = hex_md5(midpwd);
+		}
+
+		loginValid(mid, midpwd);
+	});
+	
+	window.onload = function () {
+		var ifMsg = document.getElementById('name0');
+		if (!ifMsg) {
+			var noneMsgTip = document.createElement('p');
+			noneMsgTip.innerText = '目前没有任何用户注册！不用删除！';
+			noneMsgTip.style.color = '#f00';
+			noneMsgTip.style.marginTop = '100px';
+			noneMsgTip.style.fontSize = '50px';
+			document.body.appendChild(noneMsgTip);
+			var table = document.getElementsByTagName('table')[0];
+			table.style.display = 'none';
+		}
+		else {
+			var inputelts = document.getElementsByTagName('input');
+			for (var i = 0, len = inputelts.length; i < len; i++) {
+				if (inputelts[i].id.substring(0, 1) === '$') {
+					inputelts[i].onclick = (function (i) {
+						return function () {
+							var sure = window.confirm('您确定要将用户"' + document.getElementById('name' + i).innerText + '"删除吗？');
+							if (sure) {
+								inputelts[i].disabled = true;
+								var request = new XMLHttpRequest();
+								var uid = inputelts[i].parentNode.parentNode.firstChild.innerText;
+								var url = php + '/Index/removeuid?uid=' + uid;
+								request.open('GET', url);
+								request.send(null);
+								request.onreadystatechange = function () {
+									if (request.readyState === 4) {
+										if (request.status === 200) {
+											var text = document.createTextNode(request.responseText);
+											inputelts[i].parentNode.appendChild(text);
+											inputelts[i].checked = true;
+										}
+		 							}
+								}
+							}
+							else {
+								inputelts[i].checked = false;
+							}
+						}
+					})(i);
+				}
+			}
+		}
+	}
+</script>
+</body>
+</html>

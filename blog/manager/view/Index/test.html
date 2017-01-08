@@ -1,0 +1,19 @@
+<script>
+var request = new XMLHttpRequest();
+request.open('GET', '__EDITOR__/Index/test');
+request.send(null);
+		request.onreadystatechange = function () {
+	    	if (request.readyState === 4) {
+	    		if (request.status === 200) {
+	    			// 文章没有编辑、文章插入数据库失败
+	    			// 或者文章插入数据库成功都是用以下处理方式
+	    			document.getElementById('result').innerHTML = request.responseText;
+	    		}
+	    		else {
+	    			// 当请求不到数据时就会导致错误，用以下方法显示
+	    			alert('发生错误：' + request.status);
+	    		}
+	    	}
+	    }
+</script>
+<p id="result"></p>

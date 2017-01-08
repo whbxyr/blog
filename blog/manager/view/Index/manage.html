@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>管理员登陆</title>
+    <script src="__JS__/manager/flagsign.js"></script>
+    <script src="__JS__/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script src="__JS__/event.js"></script>
+    <script src="__JS__/htmlcode.js"></script>
+    <script src="__JS__/cookie.js"></script>
+    <script src="__JS__/getDom.js"></script>
+    <link rel="stylesheet" href="__CSS__/manage.css">
+    <link rel="stylesheet" href="__CSS__/clock.css">
+    <!-- <link rel="stylesheet" href="__CSS__/clock.css"> -->
+    <!-- <link rel="shortcut icon" href="__IMG__/favicon.ico"> -->
+</head>
+<script>
+var php = '__MANAGER__';
+var mid;
+var midpwd;
+var midtype = '';
+</script>
+<body>
+    <div id="result" style="margin-top: -27px;" class="tip"></div>
+    <div style="background-color: #252525; height: 120px; position: relative;">
+        <div class="man"></div>
+        <!-- <span  class="logo"></span> -->
+        <div class="subtitle">本课设实现个人博客<br>当前页为管理员界面</div>
+        <ul class="nav">
+            <li id="add">写新文章</li>
+            <li id="remove">删除、修改、预览文章</li>
+        </ul>
+        <div id="fancyClock">
+            <div class="orange clock">
+                <div class="display" id="hours">00</div>
+                <div class="front left"></div>
+                <div class="rotate left" id="orangeRotateLeft">
+                    <div class="bg left"></div>
+                </div>
+                <div class="rotate right" id="orangeRotateRight">
+                    <div class="bg right"></div>
+                </div>
+            </div>
+            <div class="blue clock">
+                <div class="display" id="minuts">00</div>
+                <div class="front left"></div>
+                <div class="rotate left" id="blueRotateLeft">
+                    <div class="bg left"></div>
+                </div>
+                <div class="rotate right" id="blueRotateRight">
+                    <div class="bg right"></div>
+                </div>
+            </div>
+            <div class="green clock">
+                <div class="display" id="seconds">00</div>
+                <div class="front left"></div>
+                <div class="rotate left" id="greenRotateLeft">
+                    <div class="bg left"></div>
+                </div>
+                <div class="rotate right" id="greenRotateRight">
+                    <div class="bg right"></div>
+                </div>
+            </div>
+        </div>
+        <div id="login" class="managerlogin">dengluxinxi</div>
+        <script>
+        (function () {
+            mid = testCookie('mid');
+            midpwd = testCookie('midpwd');
+            if (mid && midpwd) {
+                var request = new XMLHttpRequest();
+                request.open('GET', php + '/Index/managerLogincookie?mid=' + mid + '&midpwd=' + midpwd);
+                request.send();
+                request.onreadystatechange = function () {
+                    if (request.readyState === 4) {
+                        if (request.status === 200) {
+                            // 由此处产生相关提示
+                            switch (request.responseText) {
+                                case '0':
+                                case 'u':
+                                    location.href = php;
+                                    break;
+                                case 's':
+                                    getDom('login', 'id').innerHTML = '超级管理员&nbsp;<span>' + mid + '</span>&nbsp;在线！'
+                                        + '&nbsp;<span id="exit">退出</span>';
+                                    getDom('exit', 'id').onclick = function () {
+                                        var date = new Date();
+                                        date.setTime(date.getTime() + 0);
+                                        setCookie('mid', mid, date, '/');
+                                        setCookie('midpwd', midpwd, date, '/');
+                                        location.href = php;
+                                    }
+                                    midtype = 's';
+                                    var li1 = document.createElement('li');
+                                    li1.innerHTML = '<a href="' + php +'/Index/superAuthorize?mid=">授权管理员注册</a>';
+                                    li1.id = 'authorize';
+                                    var li2 = document.createElement('li');
+                                    li2.innerHTML = '<a href="' + php +'/Index/uidManage?mid=">用户管理</a>';
+                                    // li2.id = 'authorize';
+                                    var li3 = document.createElement('li');
+                                    li3.innerHTML = '<a href="' + php +'/Index/messageManage?mid=">评论管理</a>';
+                                    var li4 = document.createElement('li');
+                                    li4.innerHTML = '<a href="' + php +'/Index/showhistory?mid=">查看访问史</a>';
+                                    // li3.id = 'authorize';
+                                    document.getElementsByClassName('nav')[0].appendChild(li1);
+                                    document.getElementsByClassName('nav')[0].appendChild(li2);
+                                    document.getElementsByClassName('nav')[0].appendChild(li3);
+                                    document.getElementsByClassName('nav')[0].appendChild(li4);
+                                    var date = new Date();
+                                    date.setTime(date.getTime() + 600000);
+                                    setCookie('mid', mid, date, '/');
+                                    setCookie('midpwd', midpwd, date, '/');
+                                    break;
+                                case 'v':
+                                    getDom('login', 'id').innerHTML = '普通管理员&nbsp;<span>' + mid + '</span>&nbsp;在线！'
+                                        + '&nbsp;<span id="exit">退出</span>';
+                                    getDom('exit', 'id').onclick = function () {
+                                        var date = new Date();
+                                        date.setTime(date.getTime() + 0);
+                                        setCookie('mid', mid, date, '/');
+                                        setCookie('midpwd', midpwd, date, '/');
+                                        location.href = php;
+                                    }
+                                    midtype = 'v';
+                                    var date = new Date();
+                                    date.setTime(date.getTime() + 600000);
+                                    setCookie('mid', mid, date, '/');
+                                    setCookie('midpwd', midpwd, date, '/');
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        else {
+                            // 当请求不到数据时就会导致错误，用以下方法显示
+                            alert('发生错误：' + request.status);
+                        }
+                    }
+                }
+            }
+            else {
+                location.href = php;
+            }
+        })();
+        </script>
+    </div>
+    <div id="articlelist" style="display: none;">
+        <table cellspacing="4" class="contentshow">
+        </table>
+        <span id="firstpage" class="bannerbutton">首页</span>
+        <span id="prev" class="bannerbutton"><上一页</span>
+        <span id="page"></span>
+        <span id="next" class="bannerbutton">下一页></span>
+        <span id="lastpage" class="bannerbutton">尾页</span>
+        <span id="jump" class="bannerbutton">跳转</span>
+        <span id="jump_input"><input id="jumppage" type="text" data-allowed-chars="0123456789" data-messageid="zipwarn" placeholder="添加页数"></span>
+        <span id="zipwarn" style="color: red; visibility: hidden;">只支持非负整数</span>
+    </div>
+    <script src="__JS__/whenReady.js"></script>
+    <script src="__JS__/InputFilter.js"></script>
+    <script src="__JS__/manager/getInformation.js"></script>
+    <script src="__JS__/manager/bannerShow.js"></script>
+    <script src="__JS__/manager/removeArticle.js"></script>
+    <script src="__JS__/manager/allHandler.js"></script>
+    <script>
+        // 给“编辑文章”按钮注册事件
+        EventUtil.addHandler(document.getElementById('add'), 'click', allHandler._addHandler);
+        // 给“删除文章”按钮注册事件
+        EventUtil.addHandler(document.getElementById('remove'), 'click', allHandler.removeHandler);
+        // 给文章列表页“首页”按钮注册事件
+        EventUtil.addHandler(document.getElementById('firstpage'), 'click', allHandler.firstpageHandler);
+        // 给文章列表页“<上一页”按钮注册事件
+        EventUtil.addHandler(document.getElementById('prev'), 'click', allHandler.prevHandler);
+        // 给文章列表页“下一页>”按钮注册事件
+        EventUtil.addHandler(document.getElementById('next'), 'click', allHandler.nextHandler);
+        // 给文章列表页“尾页”按钮注册事件
+        EventUtil.addHandler(document.getElementById('lastpage'), 'click', allHandler.lastpageHandler);
+        // 给文章列表页“跳转”按钮注册事件
+        EventUtil.addHandler(document.getElementById('jump'), 'click', allHandler.jumpHandler);
+    </script>
+    <span id="side">
+        <div style="margin-top: 5px; padding: 10px;">
+            <label for="kindchoose" class="inputlabel">请选择您要编辑的文章类型：</label>
+            <br>
+            <div class="choose">
+                <input id="kindchoose" type="text" placeholder="文章类型">
+                <div style="overflow: hidden; height: 42px;">
+                    <ul id="tabchoose" style="margin-top: -42px;">
+                        <li id="chaosuan" style="border-bottom: 1px solid #000;">超算生活</li>
+                        <li id="qianyan">前沿科技</li>
+                    </ul>
+                </div>
+            </div>
+            <label for="title" class="inputlabel">请输入文章标题：</label>
+            <br>
+            <div class="choose">
+                <input type="text" id="title" class="cover_title" placeholder="文章标题">
+            </div>
+            <label for="cover" class="inputlabel">以下输入封面图片链接：</label>
+            <br>
+            <div class="choose">
+                <input type="text" id="cover" class="cover_title" placeholder="图片链接">
+                <input type="button" id="coversure" value="预览">
+            </div>
+            <div id="covershow" class="coverimg">封面缩略图</div>
+        </div>
+    </span>
+    <div style="margin-top: 5px; margin-left: 80px;">
+        <input class="handinnresetnupdate" id="reset" type="button" value="重置">
+    </div>
+    <div style="margin-top: -37px; margin-left: 260px;">
+        <input class="handinnresetnupdate" id="handin" type="button" value="提交">
+    </div>
+    <div style="margin-top: 35px; margin-left: 80px; display: none;">
+        <input class="handinnresetnupdate" id="update" type="button" value="提交文章修改结果">
+    </div>
+    <script>
+        // 给“超算生活”类型注册事件
+        EventUtil.addHandler(document.getElementById('chaosuan'), 'click', allHandler.chaosuanHandler);
+        // 给“前沿科技”类型注册事件
+        EventUtil.addHandler(document.getElementById('qianyan'), 'click', allHandler.qianyanHandler);
+        // 给“文章类型选择”注册动画及事件，此处注册下拉动画
+        EventUtil.addHandler(document.getElementById('kindchoose'), 'click', allHandler.kindchoosefirstHandler);
+        // 给“文章类型选择”注册动画及事件，此处注册上提动画
+        EventUtil.addHandler(document.getElementById('kindchoose'), 'click', allHandler.kindchoosesecondHandler);
+        // 给文章封面缩略图链接确认按钮注册事件
+        EventUtil.addHandler(document.getElementById('coversure'), 'click', allHandler.coversureHandler);
+        // 给“提交文章修改结果”按钮注册事件
+        EventUtil.addHandler(document.getElementById('update'), 'click', allHandler.updateHandler);
+    </script>
+    <div id="article" style="position: absolute; left: 500px; top: 130px;"><textarea id="editor" name="content"></textarea></div>
+</body>
+</html>
+<script src="__JS__/manager/clock.js"></script>
+<script src="__JS__/manager/tinymceinit.js"></script>
+<script src="__JS__/manager/articleHandler.js"></script>
+<script src="__JS__/manager/tipAnimate.js"></script>
+<!-- <script src="__JS__/whenReady.js"></script> -->
+<!-- <script src="__JS__/InputFilter.js"></script> -->
+<!-- <script src="__JS__/md5.js"></script>
+<script src="__JS__/event.js"></script>
+<script src="__JS__/getDom.js"></script>
+<script src="__JS__/manager/login.js"></script> -->

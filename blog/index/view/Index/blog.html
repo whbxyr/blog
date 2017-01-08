@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>许源锐的博客</title>
+        <script src="__JS__/event.js"></script>
+    	<script src="__JS__/htmlcode.js"></script>
+    	<script src="__JS__/cookie.js"></script>
+    	<script src="__JS__/getDom.js"></script>
+        <link rel="stylesheet" href="__CSS__/blog.css">
+    </head>
+    <script>
+    var php = '__BLOG__';
+    var uid;
+	var uidpwd;
+	var uidtype = '';
+	function vid() {
+		var entry = '<a id="login" href="' + php + '/Index/ulogin">登陆&nbsp;</a>|'
+			+ '<a id="register" href="' + php + '/Index/ulogin">&nbsp;注册</a>';
+		var vid = testCookie('vid');
+		if (vid) {
+			getDom('user', 'id').innerHTML = '<a href="">游客&nbsp;' + vid + '</a>&nbsp;在线！' + entry;
+		}
+		else {
+			var date = new Date();
+			vid = Date.parse(date)/1000 + '';
+			var request = new XMLHttpRequest();
+	   		request.open('GET', php + '/Index/addVid?vid=' + vid);
+	  	 	request.send();
+		    date.setTime(date.getTime() + 36000000000);
+		    setCookie('vid', vid, date, '/');
+		    getDom('user', 'id').innerHTML = '<a href="">游客&nbsp;' + vid + '</a>&nbsp;在线！' + entry;
+		}
+	}
+    </script>
+    <body>
+    	<div style="position: fixed; width: 100%; z-index: 100;">
+	        <div class="toolbar-head">
+	        	<a href="#" class="home-head-img"><img src="__IMG__/head.png"></a>
+	            <a href="#" title="博客首页" class="home-head">首页</a>
+	            <div class="login" id="user">
+	                <a id="login" href="__BLOG__/Index/ulogin">登陆&nbsp;</a>|
+	                <a id="register" href="__BLOG__/Index/ulogin">&nbsp;注册</a>
+	            </div>
+	            <script>
+			        (function () {
+			            uid = testCookie('uid');
+			            uidpwd = testCookie('uidpwd');
+			            if (uid && uidpwd) {
+			                var request = new XMLHttpRequest();
+			                request.open('GET', php + '/Index/userLogincookie?uid=' + uid + '&uidpwd=' + uidpwd);
+			                request.send();
+			                request.onreadystatechange = function () {
+			                    if (request.readyState === 4) {
+			                        if (request.status === 200) {
+			                            // 由此处产生相关提示
+			                            switch (request.responseText) {
+			                                case '0':
+			             						vid();
+			                                    break;
+			                                case '1':
+			                                    getDom('user', 'id').innerHTML = '<a href="">' + uid + '</a>&nbsp;在线！'
+			                                        + '&nbsp;<a id="exit" href="">退出</a>';
+			                                    getDom('exit', 'id').onclick = function () {
+			                                        var date = new Date();
+			                                        date.setTime(date.getTime() + 0);
+			                                        setCookie('uid', uid, date, '/');
+			                                        setCookie('uidpwd', uidpwd, date, '/');
+			                                        getDom('user', 'id').innerHTML = '<a id="login" href="' + php + '/Index/ulogin">登陆&nbsp;</a>|'
+			                                            + '<a id="register" href="' + php + '/Index/ulogin">&nbsp;注册</a>';
+			                                    }
+			                                    var date = new Date();
+			                                    date.setTime(date.getTime() + 1200000);
+			                                    setCookie('uid', uid, date, '/');
+			                                    setCookie('uidpwd', uidpwd, date, '/');
+			                                    break;
+			                                default:
+			                                    break;
+			                            }
+			                        }
+			                        else {
+			                            // 当请求不到数据时就会导致错误，用以下方法显示
+			                            alert('发生错误：' + request.status);
+			                        }
+			                    }
+			                }
+			            }
+			            else {
+			            	vid();
+			            }
+			        })();
+		        </script>
+	        </div>
+	        <div id="header">
+	            <a href="#" class="blog-title">我的博客</a>
+	            <span>我不是程序员，也不是设计师，只是刚好有些想法，以及一台电脑</span>
+	        </div>
+	    </div>
+        <div id="container">
+            <div id="side">
+	            <div id="personal">
+	                <ul class="personal-head">个人资料</ul>
+	                <ul class="personal-body">
+	                    <div class="personal-avatar">
+	                        <img src="__IMG__/avatar.jpg"><br>
+	                        <span>whbxyr</span>
+	                        <div class="personal-middle"></div>
+	                    </div>
+	                    <ul>
+	                        <li>访问次数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$visitnum}<span>次</span></li>
+	                        <li>评论条数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$commentnum}<span>次</span></li>
+	                    </ul>
+	                </ul>
+	            </div>
+	            <div id="kind">
+	                <ul class="kind-head">文章分类</ul>
+	                <ul>{$lefttotal}
+
+	                    <!-- <li><a href="#">Javascript</a><span>($num})</span></li>
+	                    <li><a href="#">HTML</a><span>($num})</span></li>
+	                    <li><a href="#">CSS</a><span>($num})</span></li>
+	                    <li><a href="#">MySQL</a><span>($num})</span></li> -->
+	                </ul>
+	            </div>
+	        </div>
+            <div id="article">
+                <ul class="article-head">当前文章类别：{$nowtype}</ul>
+                <div class="article-container">{$middlearticle}
+                    <!-- <div class="article-list first"><ul><a href="">$title}</a></ul><div><a href=""><span style="background-image:url(__IMG__/timg.jpg);"></span></a></div><ul>$time}<span>总计评论$num}次</span></ul></div>
+                    <div class="article-list second"><ul><a href="">$title}</a></ul><div><a href=""><span style="background-image:url(__IMG__/timg.jpg);"></span></a></div><ul>$time}<span>总计评论$num}次</span></ul></div>
+                    <div class="article-list third"><ul><a href="">$title}</a></ul><div><a href=""><span style="background-image:url(__IMG__/timg.jpg);"></span></a></div><ul>$time}<span>总计评论$num}次</span></ul></div>
+                    <div class="article-list forth"><ul><a href="">$title}</a></ul><div><a href=""><span style="background-image:url(__IMG__/timg.jpg);"></span></a></div><ul>$time}<span>总计评论$num}次</span></ul></div> -->
+                </div>
+            </div>
+            <div id="newest">
+	            <ul class="newest-head">最新文章</ul>
+	            <ul>{$newestarticle}
+	                <!-- <li><div class="item-thumbnail"><a href="" class="thumbnail"><span></span></a></div><div class="item-inner"><p><a href="">$title}</a></p><p class="newest-time">$time}</p></div></li>
+	                <li><div class="item-thumbnail"><a href="" class="thumbnail"><span></span></a></div><div class="item-inner"><p><a href="">$title}</a></p><p class="newest-time">$time}</p></div></li>
+	                <li><div class="item-thumbnail"><a href="" class="thumbnail"><span></span></a></div><div class="item-inner"><p><a href="">$title}</a></p><p class="newest-time">$time}</p></div></li>
+	                <li><div class="item-thumbnail"><a href="" class="thumbnail"><span></span></a></div><div class="item-inner"><p><a href="">$title}</a></p><p class="newest-time">$time}</p></div></li>
+	                <li><div class="item-thumbnail"><a href="" class="thumbnail"><span></span></a></div><div class="item-inner"><p><a href="">$title}</a></p><p class="newest-time">$time}</p></div></li> -->
+	            </ul>
+	        </div>
+        </div>
+        <div style="width: 5rem;height: 1rem;background: #777;position: fixed;margin-bottom: 0.2rem;">
+        </div>
+    </body>
+</html>

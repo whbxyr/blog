@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="__JS__/htmlcode.js"></script>
+    <script src="__JS__/cookie.js"></script>
+    <script src="__JS__/getDom.js"></script>
+    <script src="__JS__/event.js"></script>
+    <script src="__JS__/date.js"></script>
+    <!-- <link rel="shortcut icon" href="./images/favicon.ico"> -->
+    <script>
+    var php = '__BLOG__';
+    </script>
+    <style>
+    body {
+    	font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+        font-size: 30px;
+    }
+    #all {
+        margin: 40px;
+    }
+    .title {
+        margin: 0;
+        font-size: 70px;
+        font-weight: bold;
+        padding-bottom: 50px;
+    }
+    .time {
+        font-style: normal;
+        color: #8c8c8c;
+    }
+    #backMain {
+    	text-decoration: none;
+    }
+    #article {
+        /*border-top: 1px solid #E7E7EB;*/
+    	/*text-indent: 2em;*/
+       	/*font-size: 25px;*/
+    }
+    #qrcode {
+        /*background-image: url(./images/QRcode.jpg);*/
+        /*width: 500px;*/
+        /*height: 500px;*/
+        /*background-repeat: no-repeat;*/
+        /*background-size: 100% 100%;*/
+    }
+    #comment {
+        box-shadow: 1px 1px 0 #E7E7E7;
+        box-sizing: border-box;
+        border-color: #CCCCCC #999999 #999999 #CCCCCC;
+        border-style: solid;
+        border-width: 1px;
+        font-family: arial,sans-serif;
+        font-size: 25px;
+        height: 70px;
+        margin: 10px auto;
+        /*outline-color: -moz-use-text-color;*/
+        outline-color: rgba(169, 169, 169, 0.5);
+        outline-style: none;
+        outline-width: medium;
+        padding: 5px;
+        width: 100%;
+    }
+    @media only screen and (min-width: 1025px) {
+        body {
+            font-size: 16px;
+        }
+        #all {
+    	    width: 50%;
+    	    margin: 0 auto;
+        }
+        .title {
+            margin: default;
+            margin-bottom: 10px;
+            font-size: 30px;
+            border-bottom: 1px solid #E7E7EB;
+            padding-bottom: 10px;
+        }
+    }
+    .old {
+    	margin-top: 0;
+        height: 70px;
+    	border: 1px solid #000;
+    	margin: 0 auto;
+    	/*background-color: #0f0;*/
+        position: relative;
+        border-radius: 5px;
+    }
+    .left {
+        height: 100%;
+        width: 30%;
+        border-right: 1px solid #000;
+        position: relative;
+    }
+    .right {
+        width: 65%;
+        height: 100%;
+        position: absolute;
+        left: 31%;
+        top: 0;
+        padding: 10px;
+        /*background: #f00;*/
+        box-sizing: border-box;
+    }
+    .left div {
+        position: absolute;
+    }
+    .lou {
+        left: 20%;
+        top: 20%;
+    }
+    .uid {
+        left: 50%;
+        top: 20%;
+    }
+    .time {
+        left: 10%;
+        bottom: 20%;
+    }
+    #send {
+        color: #fff;
+        display: inline-block;
+        margin-left: 80%;
+        background-color: #000;
+        border-radius: 5px;
+        width: 100px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+    #send:hover {
+        background-color: #777;
+    }
+    </style>
+    <script>
+    </script>
+    {$content}
+    <div id="commentdiv" style="width: 100%; display: none; background-color: #fff;">
+        <textarea id="comment" placeholder="单击此处留言" style="display: block;"></textarea>
+        <span id="send">发送</span>
+    </div>
+    <div id="message">
+    {$message}
+    </div>
+    <!-- <div class="old">
+        <div class="left">
+            <div class="lou">第1楼</div>
+            <div class="uid">aaa</div>
+            <div class="time">2016-12-29 13:48:12</div>
+        </div>
+        <div class="right">hah</div>
+    </div>
+    <div class="old">
+        <div class="left">
+            <div class="lou">第1楼</div>
+            <div class="uid">aaa</div>
+            <div class="time">2016-12-29 13:48:12</div>
+        </div>
+        <div class="right">hah</div>
+    </div>
+    <div class="old">
+        <div class="left">
+            <div class="lou">第1楼</div>
+            <div class="uid">aaa</div>
+            <div class="time">2016-12-29 13:48:12</div>
+        </div>
+        <div class="right">hah</div>
+    </div>
+    <div class="old">
+        <div class="left">
+            <div class="lou">第1楼</div>
+            <div class="uid">aaa</div>
+            <div class="time">2016-12-29 13:48:12</div>
+        </div>
+        <div class="right">hah</div>
+    </div> -->
+    </div>
+</body>
+</html>
+<script>
+    var commentdiv = getDom('commentdiv', 'id');
+    var uid = '';
+	function history(id, type) {
+		var ano = location.href.slice(-10);
+		time = Date.parse(new Date())/1000 + '';
+		var request = new XMLHttpRequest();
+	   	request.open('GET', php + '/Index/addhistory?id=' + id + '&ano=' + ano + '&time=' + time + '&type=' + type);
+	  	request.send();
+	  	return;
+	}
+	(function () {
+		uid = testCookie('uid');
+		if (uid) {
+            commentdiv.style.display = 'block';
+            history(uid, 'u');
+            return;
+		}
+		var vid = testCookie('vid');
+		if (vid) {
+			history(vid);
+			return;
+		}
+		var date = new Date();
+		vid = Date.parse(date)/1000 + '';
+		var request = new XMLHttpRequest();
+	   	request.open('GET', php + '/Index/addVid?vid=' + vid);
+	  	request.send();
+		date.setTime(date.getTime() + 36000000000);
+		setCookie('vid', vid, date, '/');
+
+		history(vid, 'v');
+	})();
+	var article = document.getElementById('article');
+	if (article) {
+		var content = article.innerHTML;
+	    article.innerHTML = HtmlUtil.htmlDecode(content);
+	}
+	else {
+		console.log('nothing');
+	}
+    var send = getDom('send', 'id');
+    EventUtil.addHandler(send, 'click', function () {
+        var message = getDom('comment', 'id').value;
+        console.log(message);
+        if (!message) {
+            return;
+        }
+        else {
+            var ano = location.href.slice(-10);
+            var date = new Date();
+            var time = Date.parse(date)/1000 + '';
+            var request = new XMLHttpRequest();
+            request.open('GET', php + '/Index/leaveMessage?uid=' + uid + '&ano=' + ano + '&time=' + time + '&message=' + message);
+            request.send();
+            var ctime = getDom('old', 'class').length + 1;
+            // var newdiv = document.createElement('div');
+            // newdiv.setAttribute('class', 'old');
+            // getDom('all', 'id').appendChild(newdiv);
+            var newmessage = '<div class="old"><div class="left"><div class="lou">第' + ctime + '楼</div><div class="uid">';
+            newmessage += uid + '</div><div class="time">' + get_time_format(time * 1000);
+            newmessage += '</div></div><div class="right">' + message + '</div></div>';
+            var messagediv = getDom('message', 'id');
+            messagediv.innerHTML = newmessage + messagediv.innerHTML;
+            var nowmessage = getDom('comment', 'id');
+            nowmessage.value = '';
+            nowmessage.placeholder = '单击此处再次输入评论';
+        }
+    });
+</script>
