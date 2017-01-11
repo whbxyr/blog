@@ -28,38 +28,136 @@ class Index
         else {
             $nowpage = input('get.nowpage');
         }
+        if ($nowpage < 0) {
+            $nowpage = 1;
+        }
         $view->visitnum = DB::query('select count(*) from uhistory')[0]['count(*)']
             + DB::query('select count(*) from vhistory')[0]['count(*)'];
         $middlearticle = '';
         $newestarticle = '';
-        $limit = ($nowpage - 1) * 4;
-        if ($nowtype === 'all') {
-            $article = DB::query('select * from view_nowarticle limit '.$limit.', 4');
-            $newarticle = DB::query('select * from view_nowarticle');
+        $num = 4;
+        $numsql = 'select count(*) from view_nowarticle';
+        $articlesql = 'select * from view_nowarticle';
+        if ($nowtype !== 'all') {
+            $numsql .= ' where type = "'.$nowtype.'"';
+            $articlesql .= ' where type = "'.$nowtype.'"';
         }
-        else {
-            $article = DB::query('select * from view_nowarticle where type = "'.$nowtype.'" limit '.$limit.', 4');
-            $newarticle = DB::query('select * from view_nowarticle where type = "'.$nowtype.'"');
+        $allarticle = DB::query($numsql)[0]['count(*)'];
+        $limit = $allarticle - $nowpage * 4;
+        if ($limit < 0) {
+            $num = $limit + 4;
+            $limit = 0;
         }
+        $article = DB::query($articlesql.' limit '.$limit.', '.$num);
+        $newarticle = DB::query($articlesql);
+        // if ($nowtype === 'all') {
+        //     $allarticle = DB::query('select count(*) from view_nowarticle')[0]['count(*)'];
+        //     $limit = $allarticle - $nowpage * 4;
+        //     if ($limit < 0) {
+        //         $num = $limit + 4;
+        //         $limit = 0;
+        //     }
+        //     $article = DB::query('select * from view_nowarticle limit '.$limit.', '.$num);
+        //     $newarticle = DB::query('select * from view_nowarticle');
+        // }
+        // else {
+        //     $allarticle = DB::query('select count(*) from view_nowarticle where type = "'.$nowtype.'"')[0]['count(*)'];
+        //     $limit = $allarticle - $nowpage * 4;
+        //     if ($limit < 0) {
+        //         $num = $limit + 4;
+        //         $limit = 0;
+        //     }
+        //     $article = DB::query('select * from view_nowarticle where type = "'.$nowtype.'" limit '.$limit.', '.$num);
+        //     $newarticle = DB::query('select * from view_nowarticle where type = "'.$nowtype.'"');
+        // }
+        $allpage = ceil($allarticle / 4);
+        if ($nowpage > $allpage) {
+            $nowpage = $allpage;
+        }
+        $view->allpage = $allpage;
+        $view->nowpage = $nowpage;
+        $banner = '';
+        // 如果文章总页数低于1，那么就不需要分页条
+        if ($allpage > 0) {
+            // 先将所有可能不需要‘...’的情况的$allpage的最大数求出来，这里则是5+2=7
+            if ($allpage <= 7) {
+                for ($i = 1; $i <= $allpage; $i++) {
+                    if ($i == $nowpage) {
+                        $banner .= '<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage='.$i;
+                        $banner .= '" class="now">'.$i.'</a>';
+                    }
+                    else {
+                        $banner .= '<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage='.$i.'">'.$i.'</a>';
+                    }
+                }   
+            }
+            // 剩下的情况是需要‘...’的
+            else {
+                // 这里是只需要前面一个‘...’的情况
+                if ($nowpage <= 4) {
+                    for ($i = 1; $i <= 5; $i++) {
+                        if ($i == $nowpage) {
+                            $banner .= '<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage='.$i;
+                            $banner .= '" class="now">'.$i.'</a>';
+                        }
+                        else {
+                            $banner .= '<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage='.$i.'">'.$i.'</a>';
+                        }
+                    }
+                    if ($nowpage == 4) {
+                        $banner .= '<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage=6">6</a>';
+                    }
+                    $banner .= '...<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage='.$allpage.'">'.$allpage.'</a>';
+                }
+                // 这里是只需要后面一个‘...’的情况
+                else if ($nowpage >= $allpage - 3) {
+                    $banner .= '<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage=1">1</a>...';
+                    if ($nowpage == $allpage - 3) {
+                        $banner .= '<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage='.($allpage - 5).'">'.($allpage - 5).'</a>';
+                    }
+                    for ($i = $allpage; $i > $allpage - 5; $i--) {
+                        if ($i == $nowpage) {
+                            $banner .= '<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage='.$i;
+                            $banner .= '" class="now">'.$i.'</a>';
+                        }
+                        else {
+                            $banner .= '<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage='.$i.'">'.$i.'</a>';
+                        }
+                    }
+                }
+                // 这里是前面后面都需要一个‘...’的情况
+                else {
+                    $banner .= '<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage=1">1</a>...';
+                    for ($i = $nowpage - 2; $i <= $nowpage + 2; $i++) {
+                        if ($i == $nowpage) {
+                            $banner .= '<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage='.$i;
+                            $banner .= '" class="now">'.$i.'</a>';
+                        }
+                        else {
+                            $banner .= '<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage='.$i.'">'.$i.'</a>';
+                        }
+                    }
+                    $banner .= '...<a href="__BLOG__/Index/index?nowtype='.$nowtype.'&nowpage='.$allpage.'">'.$allpage.'</a>';
+                }
+            }
+        }
+        $view->banner = $banner;
         $length = sizeof($article);
         $newlength = sizeof($newarticle);
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = $length - 1; $i >= 0; $i--) {
             $row = $article[$i];
-            // if ($row['ano'] === '1482993591') {
-            //     continue;
-            // }
             switch ($i) {
                 case 0:
-                    $class = 'first';
+                    $class = 'forth';
                     break;
                 case 1:
-                    $class = 'second';
-                    break;
-                case 2:
                     $class = 'third';
                     break;
+                case 2:
+                    $class = 'second';
+                    break;
                 case 3:
-                    $class = 'forth';
+                    $class = 'first';
                     break;
                 default:
                     break;
@@ -76,20 +174,22 @@ class Index
         }
         $view->middlearticle = $middlearticle;
         $view->newestarticle = $newestarticle;
-        // $view->assign('CSS', __DIR__.'/css');
         $view->commentnum = DB::query('select * from view_ctimes')[0]['allctimes'];
         $total = DB::query('select * from atype');
-        $allnum = DB::query('select * from view_allarticles')[0]['totalnum'];
-        $lefttotal = '<li><a href="__BLOG__/Index/index?nowtype=all&nowpage=1">全部文章</a><span>('.$allnum.')</span></li>';
-        $totalnum = sizeof($total);
-        for ($i = 0; $i < $totalnum; $i++) {
-            $lefttotal .= '<li><a href="__BLOG__/Index/index?nowtype='.$total[$i]['type'].'&nowpage=1">'.$total[$i]['type'].'</a><span>('.$total[$i]['amount'].')</span></li>';
+        if (!$total) {
+            $view->lefttotal = '';
         }
+        else {
+            $allnum = DB::query('select * from view_allarticles')[0]['totalnum'];
+            $lefttotal = '<li><a href="__BLOG__/Index/index?nowtype=all&nowpage=1">全部文章</a><span>('.$allnum.')</span></li>';
+            $totalnum = sizeof($total);
+            for ($i = 0; $i < $totalnum; $i++) {
+                $lefttotal .= '<li><a href="__BLOG__/Index/index?nowtype='.$total[$i]['type'].'&nowpage=1">'.$total[$i]['type'].'</a><span>('.$total[$i]['amount'].')</span></li>';
+            }
 
-        $view->lefttotal = $lefttotal;
-        // return DB::('select * from ctimes');
+            $view->lefttotal = $lefttotal;
+        }
         return $view->fetch('blog');
-        // return __DIR__;
         // return '<style type="text/css">*{ padding: 0; margin: 0; } .think_default_text{ padding: 4px 48px;} a{color:#2E5CD5;cursor: pointer;text-decoration: none} a:hover{text-decoration:underline; } body{ background: #fff; font-family: "Century Gothic","Microsoft yahei"; color: #333;font-size:18px} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.6em; font-size: 42px }</style><div style="padding: 24px 48px;"> <h1>:)</h1><p> ThinkPHP V5<br/><span style="font-size:30px">十年磨一剑 - 为API开发设计的高性能框架</span></p><span style="font-size:22px;">[ V5.0 版本由 <a href="http://www.qiniu.com" target="qiniu">七牛云</a> 独家赞助发布 ]</span></div><script type="text/javascript" src="http://tajs.qq.com/stats?sId=9347272" charset="UTF-8"></script><script type="text/javascript" src="http://ad.topthink.com/Public/static/client.js"></script><thinkad id="ad_bd568ce7058a1091"></thinkad>';
     }
 
@@ -138,7 +238,7 @@ class Index
         $length = sizeof($message_select);
         for ($i = $length - 1; $i >= 0; $i--) {
             $row = $message_select[$i];
-            $message .= '<div class="old"><div class="left"><div class="lou">第'.($i + 1).'楼</div><div class="uid">'.$row['uid'];
+            $message .= '<div class="old"><div class="left"><div class="lou">第'.($i + 1).'楼</div><div class="uid">用户:'.$row['uid'];
             $message .= '</div><div class="time">'.date('Y-m-d h:i:s', $row['time']).'</div></div>';
             $message .= '<div class="right">'.$row['message'].'</div></div>';
         }

@@ -187,8 +187,8 @@ class Index
         }
         else {
             // 考虑写个存储过程;
-            // DB::execute('insert into mhistory values("'.$mid.'", "'.$title.'", "'.$time.'", "c")');
-            DB::execute('call blog.insert_mhistory("'.$mid.'", "'.$title.'", "'.$time.'", "c")');
+            DB::execute('insert into mhistory values("'.$mid.'", "'.$title.'", "'.$time.'", "c")');
+            // DB::execute('call blog.insert_mhistory("'.$mid.'", "'.$title.'", "'.$time.'", "c")');
             // DB::execute()
             return '成功！管理员文章发布成功！';
         }
@@ -282,8 +282,8 @@ class Index
             // 考虑写为触发器
             // DB::execute('update atype set amount = amount - 1 where atno = "'.$atno[0]['atno'].'"');
             // 考虑写为存储过程
-            // DB::execute('insert into mhistory values("'.$mid.'", "'.$title.'", "'.$removetime.'", "d")');
-            DB::execute('call blog.insert_mhistory("'.$mid.'", "'.$title.'", "'.$removetime.'", "d")');
+            DB::execute('insert into mhistory values("'.$mid.'", "'.$title.'", "'.$removetime.'", "d")');
+            // DB::execute('call blog.insert_mhistory("'.$mid.'", "'.$title.'", "'.$removetime.'", "d")');
             return '成功删除了一篇文章！';
         }
     }
@@ -328,8 +328,8 @@ class Index
             // 获取文章作者
             $mid = DB::query('select distinct mid from mhistory where title = "'.$title.'"')[0]['mid'];
             // 考虑写为存储过程
-            // DB::execute('insert into mhistory values("'.$mid.'", "'.$title.'", "'.$updatetime.'", "u")');
-            DB::execute('call blog.insert_mhistory("'.$mid.'", "'.$title.'", "'.$updatetime.'", "u")');
+            DB::execute('insert into mhistory values("'.$mid.'", "'.$title.'", "'.$updatetime.'", "u")');
+            // DB::execute('call blog.insert_mhistory("'.$mid.'", "'.$title.'", "'.$updatetime.'", "u")');
             return '文章修改成功保存！';
         }
     }

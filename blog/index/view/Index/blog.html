@@ -92,7 +92,7 @@
 		        </script>
 	        </div>
 	        <div id="header">
-	            <a href="#" class="blog-title">我的博客</a>
+	            <a href="#" class="blog-title">whbxyr&nbsp;&nbsp;的博客</a>
 	            <span>我不是程序员，也不是设计师，只是刚好有些想法，以及一台电脑</span>
 	        </div>
 	    </div>
@@ -115,7 +115,6 @@
 	            <div id="kind">
 	                <ul class="kind-head">文章分类</ul>
 	                <ul>{$lefttotal}
-
 	                    <!-- <li><a href="#">Javascript</a><span>($num})</span></li>
 	                    <li><a href="#">HTML</a><span>($num})</span></li>
 	                    <li><a href="#">CSS</a><span>($num})</span></li>
@@ -132,6 +131,16 @@
                     <div class="article-list forth"><ul><a href="">$title}</a></ul><div><a href=""><span style="background-image:url(__IMG__/timg.jpg);"></span></a></div><ul>$time}<span>总计评论$num}次</span></ul></div> -->
                 </div>
             </div>
+            <div id="banner">
+                <div style="text-align: center;">
+                    <span class="census">第&nbsp;{$nowpage}&nbsp;页</span>
+                    <span class="census">共&nbsp;{$allpage}&nbsp;页</span><br>
+                    {$banner}
+                    <!-- <a href="" class="now">1</a>
+                    <a href="">2</a>
+                    <a href="">3</a> -->
+                </div>
+	        </div>
             <div id="newest">
 	            <ul class="newest-head">最新文章</ul>
 	            <ul>{$newestarticle}
@@ -142,8 +151,30 @@
 	                <li><div class="item-thumbnail"><a href="" class="thumbnail"><span></span></a></div><div class="item-inner"><p><a href="">$title}</a></p><p class="newest-time">$time}</p></div></li> -->
 	            </ul>
 	        </div>
-	        <span style="display: inline;width: 5rem;height: 1rem;background: #777;position: absolute;margin-bottom: -1rem;">
-        	</span>
+        </div>
+        <div id="intro">
+            <div class="backtop"><a href="#">^</a></div>
+            <img src="__IMG__/me.png">
+            <ul class="contact">
+                <li>发现BUG欢迎联系我
+                    <ul>
+                        <li><span>网易邮箱</span>：raywhbxyr@163.com</li>
+                        <li><span>Google邮箱</span>：whbxyr@gmail.com</li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </body>
 </html>
+<script>
+getDom('banner', 'id').style.marginTop = parseFloat(getDom('article', 'id').scrollHeight)
+    / 100 + 0.3 + 'rem';
+var left = parseFloat(getDom('side', 'id').scrollHeight);
+var middle = parseFloat(getDom('article', 'id').scrollHeight)
+    + parseFloat(getDom('banner', 'id').scrollHeight);
+var right = parseFloat(getDom('newest', 'id').scrollHeight);
+console.log(left, middle, right)
+var max = left > middle ? left : middle > right ? left > middle ? left : middle : right;
+console.log(max);
+getDom('intro', 'id').style.marginTop = max / 100 + 0.3 + 'rem';
+</script>
