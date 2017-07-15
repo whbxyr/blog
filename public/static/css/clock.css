@@ -1,0 +1,84 @@
+#fancyClock {
+	/*float: left;*/
+	position: absolute;
+	/*margin: 9px 200px;*/
+	left: 120px;
+	top: 8px;
+	height: 100px;
+	/*border: 1px solid #111111;*/
+	width: 300px;
+}
+.clock {
+	/* 时钟div */
+	background-color: #252525;
+	height: 100px;
+	width: 100px;
+	position: relative;
+	overflow: hidden;
+	float: left;
+}
+.clock .rotate {
+	/* 两个旋转的div，每个都分为左右两部分 */
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	top: 0;
+	left: 0;
+}
+.rotate.right {
+	display: none;
+	z-index: 11;
+}
+.clock .bg,
+.clock .front {
+	width: 50px;
+	height: 100px;
+	background-color: #252525;
+	position: absolute;
+	top: 0;
+}
+.clock .display {
+	/* 小时，分钟，秒钟的显示 */
+	position: absolute;
+	width: 100px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	z-index: 20;
+	color: #F5F5F5;
+	font-size: 30px;
+	text-align: center;
+	top: 25px;
+	left: 0;
+	/* CSS3 文字阴影 */
+	text-shadow: 4px 4px 5px #333333;
+}
+/* 左半边部分 */
+.clock .bg.left {
+	left: 0;
+}
+/* 每个不同颜色的背景图: */
+.orange .bg.left {
+	background: url(../img/bg_orange_small.png) no-repeat left top;
+}
+.green .bg.left {
+	background: url(../img/bg_green_small.png) no-repeat left top;
+}
+.blue .bg.left {
+	background: url(../img/bg_blue_small.png) no-repeat left top;
+}
+/* 右边部分 */
+.clock .bg.right {
+	left: 50px;
+}
+.orange .bg.right {
+	background: url(../img/bg_orange_small.png) no-repeat right top;
+}
+.green .bg.right {
+	background: url(../img/bg_green_small.png) no-repeat right top;
+}
+.blue .bg.right {
+	background: url(../img/bg_blue_small.png) no-repeat right top;
+}
+.clock .front.left {
+	left: 0;
+	z-index: 10;
+}
