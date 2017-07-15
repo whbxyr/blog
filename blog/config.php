@@ -143,12 +143,12 @@ return [
 
     // 视图输出字符串内容替换
     'view_replace_str'       => [
-        '__CSS__'     => '/TP5.0.3/public/static/css',
-        '__JS__'      => '/TP5.0.3/public/static/js',
-        '__IMG__'     => '/TP5.0.3/public/static/img',
-        '__PHP__'     => '/TP5.0.3/public/static/php',
-        '__MANAGER__' => '/TP5.0.3/public/index.php/manager',
-        '__BLOG__'    => '/TP5.0.3/public/index.php/index',
+        '__CSS__'     => '/blog/public/static/css',
+        '__JS__'      => '/blog/public/static/js',
+        '__IMG__'     => '/blog/public/static/img',
+        '__PHP__'     => '/blog/public/static/php',
+        '__MANAGER__' => '/blog/public/index.php/manager',
+        '__BLOG__'    => '/blog/public/index.php/index',
     ],
     // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl'  => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
