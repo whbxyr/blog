@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>用户登陆</title>
+    <title>用户登录</title>
     <link rel="stylesheet" href="__CSS__/user_login.css">
 </head>
 <script>
@@ -10,24 +10,34 @@ var php = '__BLOG__';
 </script>
 <body>
   <div class="loginregister" id="login" style="display: block;">
-    <label for="uidl">用户账户:</label>
-    <input id="uidl" name="uidl" type="text" class="logininput">
+    <div class="title">登录</div>
+    <div class="input_outer">
+      <span class="user"></span>
+      <input id="uidl" name="uidl" type="text" class="logininput" placeholder="用户名">
+    </div>
     <br>
-    <label for="uidpwdl">用户密码:</label>
-    <input id="uidpwdl" name="uidpwdl" type="password" class="logininput">
+    <div class="input_outer">
+      <span class="pwd"></span>
+      <input id="uidpwdl" name="uidpwdl" type="password" class="logininput" placeholder="密码">
+    </div>
     <br>
-    <span class="button" id="loginbtn">登陆</span>
-    <span class="button" id="registerbtn">注册</span>
+    <span class="button" id="loginbtn">确定</span>
+    <span class="registerbutton" id="registerbtn">注册</span>
   </div>
   <div class="loginregister" id="register" style="display: none;">
-    <label for="uidr">自定义账户:</label>
-    <input id="uidr" name="uidr" type="text" class="registerinput">
+    <div class="title">注册</div>
+    <div class="input_outer">
+      <span class="user"></span>
+      <input id="uidr" name="uidr" type="text" class="registerinput" placeholder="自定义用户名">
+    </div>
     <br>
-    <label for="uidpwdr">自定义密码:</label>
-    <input id="uidpwdr" name="uidpwdr" type="password" class="registerinput">
+    <div class="input_outer">
+      <span class="pwd"></span>
+      <input id="uidpwdr" name="uidpwdr" type="password" class="registerinput" placeholder="设置密码">
+    </div>
     <br>
     <span class="button" id="surebtn">提交</span>
-    <span class="button" id="cancelbtn">取消</span>
+    <span class="cancelbutton" id="cancelbtn">返回</span>
   </div>
 </body>
 </html>

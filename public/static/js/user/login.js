@@ -110,8 +110,8 @@ window.onload = function () {
 		getDom('login', 'id').style.display = 'none';
 		var register = getDom('register', 'id');
 		register.style.display = 'block';
-		getDom('surebtn', 'id').innerHTML = '注册';
-        getDom('cancelbtn', 'id').innerHTML = '取消';
+		getDom('surebtn', 'id').innerHTML = '提交';
+        getDom('cancelbtn', 'id').innerHTML = '返回';
 	});
 	EventUtil.addHandler(cancelbtn, 'click', function () {
 		// 将注册窗口隐藏
