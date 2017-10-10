@@ -10,7 +10,7 @@
 /* 设置背景 */
 html {
 	font-size: 625%;
-	background: url(../img/manager_login_bg.jpg);
+	background: url(../img/manager_login_bg_new.jpg);
 	width: 100%;
 	height: 100%;
 	background-size: cover;
@@ -24,6 +24,12 @@ body {
 	box-sizing: content-box;
 	font-family: "Microsoft YaHei","微软雅黑",Helvetica,"黑体",Arial,Tahoma;
     font-size: 0.14rem;
+}
+.title {
+	font: 22px "microsoft yahei",Helvetica,Tahoma,Arial,"Microsoft jhengHei";
+	color: #fff;
+	text-align: center;
+	margin-bottom: 0.2rem;
 }
 #result {
 	box-sizing: content-box;
@@ -44,34 +50,86 @@ body {
 	padding-top: 0.5rem;
 	width: 3.5rem;
 	height: 3rem;
-	border: 0.01rem solid #333;
-	border-radius: 0.05rem;
-	background-color: rgba(28, 29, 66, 0.49);
-	box-shadow: 5px 5px #333;
 	color: #fff;
 }
 .logininput,
 .registerinput {
-	margin-left: 0.2rem;
-	margin-bottom: 0.4rem;
-	padding-left: 0.05rem;
-	width: 1.5rem;
-	height: 0.24rem;
-	line-height: 0.24rem;
+	color: #eee;
+	width: 220px;
+	height: 46px;
+	outline: none;
+	display: inline-block;
+	font: 22px "microsoft yahei",Helvetica,Tahoma,Arial,"Microsoft jhengHei";
+	margin-left: 50px;
+	border: none;
+	background: none;
+	line-height: 46px;
+}
+.input_outer {
+	height: 50px;
+	padding: 0 5px;
+	margin-bottom: 20px;
+	border-radius: 50px;
+	position: relative;
+	border: rgba(255,255,255,0.2) 2px solid;
+}
+.user {
+	width: 25px;
+	height: 25px;
+	background: url(../img/login_ico.png);
+	background-position: -125px 0;
+	position: absolute;
+	margin: 11px 13px 10px;
+}
+.pwd {
+	width: 25px;
+	height: 25px;
+	background-image: url(../img/login_ico.png);
+	background-position: -125px -34px;
+	position: absolute;
+	margin: 11px 13px 10px;
 }
 .button {
 	display: inline-block;
-	background-color: #ddd;
+	color: #fff;
+	background-color: #0096e6;
 	text-align: center;
 	line-height: 0.4rem;
 	width: 1rem;
 	height: 0.4rem;
-	border-radius: 0.02rem;
-	border: 0.01rem solid rgba(66, 66, 66, 0.5);
+	border-radius: 0.5rem;
 	cursor: pointer;
-	margin-left: 0.3rem;
-	box-shadow: 2px 3px #333;
+	margin-left: 1.1rem;
 }
-.button:hover {
-	background-color: #272727;
+.registerbutton, .cancelbutton {
+	width: 32px;
+	height: 0.4rem;
+	text-align: center;
+	color: #fff;
+	font: 16px "microsoft yahei",Helvetica,Tahoma,Arial,"Microsoft jhengHei";
+	cursor: pointer;
+	float: right;
+}
+.registerbutton:hover, .cancelbutton:hover {
+	color: #aaa;
+}
+/* WebKit browsers */
+::-webkit-input-placeholder {
+	color: #fff;
+	font: 16px "microsoft yahei",Helvetica,Tahoma,Arial,"Microsoft jhengHei";
+}
+/* Mozilla Firefox 4 to 18 */
+:-moz-placeholder {
+	color: #fff;
+	font: 16px "microsoft yahei",Helvetica,Tahoma,Arial,"Microsoft jhengHei";
+}
+/* Mozilla Firefox 19+ */
+::-moz-placeholder {
+	color: #fff;
+	font: 16px "microsoft yahei",Helvetica,Tahoma,Arial,"Microsoft jhengHei";
+}
+/* Internet Explorer 10+ */
+:-ms-input-placeholder {
+	color: #fff;
+	font: 16px "microsoft yahei",Helvetica,Tahoma,Arial,"Microsoft jhengHei";
 }

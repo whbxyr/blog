@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>管理员登陆</title>
+    <title>管理员登录</title>
     <link rel="stylesheet" href="__CSS__/manager_login.css">
     <script src="__JS__/tipAnimate.js"></script>
     <script src="__JS__/manager/flagsign.js"></script>
@@ -11,26 +11,35 @@
 var php = '__MANAGER__';
 </script>
 <body>
-  <!-- <div id="result" style="margin-top: 0rem;" class="tip"></div> -->
   <div class="loginregister" id="login" style="display: block;">
-    <label for="midl">管理员账户:</label>
-    <input id="midl" name="midl" type="text" class="logininput">
+    <div class="title">管理员登录</div>
+    <div class="input_outer">
+      <span class="user"></span>
+      <input id="midl" name="midl" type="text" class="logininput" placeholder="管理员账户">
+    </div>
     <br>
-    <label for="midpwdl">管理员密码:</label>
-    <input id="midpwdl" name="midpwdl" type="password" class="logininput">
+    <div class="input_outer">
+      <span class="pwd"></span>
+      <input id="midpwdl" name="midpwdl" type="password" class="logininput" placeholder="管理员密码">
+    </div>
     <br>
-    <span class="button" id="loginbtn">登陆</span>
-    <span class="button" id="registerbtn">注册</span>
+    <span class="button" id="loginbtn">确定</span>
+    <span class="registerbutton" id="registerbtn">注册</span>
   </div>
   <div class="loginregister" id="register" style="display: none;">
-    <label for="midr">自定义账户:</label>
-    <input id="midr" name="midr" type="text" class="registerinput">
+    <div class="title">管理员注册</div>
+    <div class="input_outer">
+      <span class="user"></span>
+      <input id="midr" name="midr" type="text" class="registerinput" placeholder="自定义账户">
+    </div>
     <br>
-    <label for="midpwdr">自定义密码:</label>
-    <input id="midpwdr" name="midpwdr" type="password" class="registerinput">
+    <div class="input_outer">
+      <span class="pwd"></span>
+      <input id="midpwdr" name="midpwdr" type="password" class="registerinput" placeholder="设置密码">
+    </div>
     <br>
     <span class="button" id="surebtn">提交</span>
-    <span class="button" id="cancelbtn">取消</span>
+    <span class="cancelbutton" id="cancelbtn">返回</span>
   </div>
 </body>
 </html>
